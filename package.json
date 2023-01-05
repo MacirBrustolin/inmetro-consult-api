@@ -1,7 +1,7 @@
 {
-  "name": "fullstack-template",
+  "name": "inmetro-consult-api",
   "version": "1.0.0",
-  "description": "Starter template for future projects",
+  "description": "API para consultar registros do inmetro de inversores e microinversores solares",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",

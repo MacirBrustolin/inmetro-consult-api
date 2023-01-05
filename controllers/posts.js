@@ -10,7 +10,7 @@ module.exports = {
       //Grabbing just the posts of the logged-in user
       const posts = await Post.find({ user: req.user.id });
       //Sending post data from mongodb and user data to ejs template
-      res.render("profile.ejs", { posts: posts, user: req.user });
+      res.send(posts)
     } catch (err) {
       console.log(err);
     }
@@ -22,7 +22,7 @@ module.exports = {
       //http://localhost:2121/post/631a7f59a3e56acfc7da286f
       //id === 631a7f59a3e56acfc7da286f
       const post = await Post.findById(req.params.id);
-      res.render("post.ejs", { post: post, user: req.user});
+      res.send(posts)
     } catch (err) {
       console.log(err);
     }

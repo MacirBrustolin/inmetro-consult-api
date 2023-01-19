@@ -1,6 +1,8 @@
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const User = require("../models/User");
+const JWTstrategy = require('passport-jwt').Strategy;
+const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 module.exports = function (passport) {
   passport.use(
@@ -38,4 +40,21 @@ module.exports = function (passport) {
   passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => done(err, user));
   });
+
+  passport.use(
+    new JWTstrategy(
+      {
+        secretOrKey: 'TOP_SECRET',
+        jwtFromRequest: ExtractJWT.fromUrlQueryParameter('secret_token')
+      },
+      async (token, done) => {
+        try {
+          return done(null, token.user);
+        } catch (error) {
+          done(error);
+        }
+      }
+    )
+  )
+
 };

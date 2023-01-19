@@ -18,18 +18,22 @@ const RegisterSchema = new mongoose.Schema({
     required: true,
   },
   INMETRO_URL: {
-    type: string,
+    type: String,
     required: true,
   },
   Description: {
-    type: string,
+    type: String,
     required: true,
   },
   Status: {
-    type: string,
+    type: String,
     required: true,
   },
-});
+},
+{
+  timestamps: true,
+}
+);
 
 //MongoDB Collection named here - will give lowercase plural of name 
 module.exports = mongoose.model("Register", RegisterSchema);

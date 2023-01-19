@@ -6,11 +6,11 @@ const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const methodOverride = require("method-override");
-const flash = require("express-flash");
 const logger = require("morgan");
 const connectDB = require("./config/database");
-const apiRoutes = require("./routes/api");
-const postsRoutes = require("./routes/posts");
+const userRoutes = require("./routes/userRoutes");
+const registersRoutes = require("./routes/registersRoutes");
+const { errorHandler } = require('./middleware/errorMiddleware');
 
 
 
@@ -24,7 +24,7 @@ require("./config/passport")(passport);
 connectDB();
 
 //Static Folder
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 //Body Parsing
 app.use(express.urlencoded({ extended: true }));
@@ -54,10 +54,11 @@ app.use(session());
 // app.use(flash());
 
 //Setup Routes For Which The Server Is Listening
-app.use("/api", apiRoutes);
-app.use("/api/post", postsRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/registers', registersRoutes);
 
-
+//Error handdling
+app.use(errorHandler);
 
 //Server Running
 app.listen(process.env.PORT, () => {

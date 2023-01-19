@@ -1,35 +1,35 @@
 const mongoose = require("mongoose");
 
-const PostSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    require: true,
-  },
-  cloudinaryId: {
-    type: String,
-    require: true,
-  },
-  caption: {
-    type: String,
-    required: true,
-  },
-  likes: {
+const RegisterSchema = new mongoose.Schema({
+  INMETRO: {
     type: Number,
     required: true,
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+  Brand: {
+    type: String,
+    require: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  Model: {
+    type: String,
+    require: true,
+  },
+  PowerkW: {
+    type: Number,
+    required: true,
+  },
+  INMETRO_URL: {
+    type: string,
+    required: true,
+  },
+  Description: {
+    type: string,
+    required: true,
+  },
+  Status: {
+    type: string,
+    required: true,
   },
 });
 
 //MongoDB Collection named here - will give lowercase plural of name 
-module.exports = mongoose.model("Post", PostSchema);
+module.exports = mongoose.model("Register", RegisterSchema);

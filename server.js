@@ -11,6 +11,7 @@ const connectDB = require("./config/database");
 const userRoutes = require("./routes/userRoutes");
 const registersRoutes = require("./routes/registersRoutes");
 const { errorHandler } = require('./middleware/errorMiddleware');
+const path = require("path")
 
 
 

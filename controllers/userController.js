@@ -8,7 +8,7 @@ const User = require('../models/userModel')
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { userName, email, password } = req.body
-  console.log(userName)
+  
   if (!userName || !email || !password) {
     res.status(400)
     throw new Error('Please add all fields')
@@ -23,9 +23,9 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // Hash password
-  const salt = await bcrypt.genSalt(10)
+  const salt = await bcrypt.genSalt(15)
   const hashedPassword = await bcrypt.hash(password, salt)
-
+  
   // Create user
   const user = await User.create({
     userName,

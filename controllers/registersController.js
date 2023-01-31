@@ -3,27 +3,41 @@ const asyncHandler = require('express-async-handler')
 const Register = require('../models/registerModel')
 const User = require('../models/userModel')
 
-// @desc    Get goals
+// @desc    Get all registers
 // @route   GET /api/goals
 // @access  Private
 const getRegisters = asyncHandler(async (req, res) => {
-  const registers = await Register.find({ user: req.user.id })
-
+  const registers = await Register.find()
   res.status(200).json(registers)
 })
 
-// @desc    Set goal
-// @route   POST /api/goals
+// @desc    Set register
+// @route   POST /api/register
 // @access  Private
 const setRegister = asyncHandler(async (req, res) => {
-  if (!req.body.text) {
+  const { inmetroRegister, brand, model, powerkW, inmetroURL, description, status } = req.body
+  if (!inmetroRegister || !brand || !model || !powerkW || !inmetroURL || !description || !status) {
     res.status(400)
-    throw new Error('Please add a text field')
+    throw new Error('Please add all the fields')
+  }
+
+  // Check if register exists
+  const registerExists = await Register.findOne({ inmetroRegister })
+
+  if (registerExists) {
+    res.status(400)
+    throw new Error('Register already exists')
   }
 
   const register = await Register.create({
-    text: req.body.text,
-    user: req.user.id,
+    user:req.user.id,
+    inmetroRegister: inmetroRegister,
+    brand: brand,
+    model:model,
+    powerkW:powerkW,
+    inmetroURL:inmetroURL,
+    description:description,
+    status:status,
   })
 
   res.status(200).json(register)

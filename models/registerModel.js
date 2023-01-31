@@ -6,31 +6,31 @@ const RegisterSchema = new mongoose.Schema({
     required:true,
     ref: 'User'
   },
-  INMETRO: {
-    type: Number,
+  inmetroRegister: {
+    type: String,
     required: [true, 'Please add an INMETRO register']
   },
-  Brand: {
+  brand: {
     type: String,
     require: [true, 'Please add a Brand for the equipment']
   },
-  Model: {
+  model: {
     type: String,
     require: [true, 'Please add a Model for the equipment']
   },
-  PowerkW: {
+  powerkW: {
     type: Number,
     required: [true, 'Please add the Power rating for the equipment']
   },
-  INMETRO_URL: {
+  inmetroURL: {
     type: String,
     required: [true, 'Please add the register URL']
   },
-  Description: {
+  description: {
     type: String,
     required: [true, 'Please add a Description of the equipment']
   },
-  Status: {
+  status: {
     type: String,
     required: [true, 'Please add a Status for the register']
   },

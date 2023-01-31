@@ -75,6 +75,56 @@ const getMe = asyncHandler(async (req, res) => {
   res.status(200).json(req.user)
 })
 
+// @desc    Get all users
+// @route   GET /api/users/all
+// @access  Private and admin
+const getAll = asyncHandler(async (req, res) => {
+  const users = await User.find()
+  
+  if (req.user.role !== 'admin') {
+    res.status(401)
+    throw new Error('User not authorized')
+  }
+
+  if (!users){
+    res.status(404)
+    throw new Error('Users not found!')
+  }
+  res.status(200).json(users)
+})
+
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Private/ADM
+
+const updateUserRole = asyncHandler(async (req, res) => {
+  const {id, role} = req.body
+
+  if (!role || !id) {
+    res.status(400)
+    throw new Error('Please add all fields')
+  }
+
+  const user = await User.findById(id)
+
+  // if (req.user.role !== 'admin') {
+  //   res.status(401)
+  //   throw new Error('User not authorized')
+  // }
+
+  //Check for the user existence
+  if (!user) {
+    res.status(400)
+    throw new Error('User not found')
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+    role: role,
+  })
+  const userUpdated = await User.findById(id)
+  res.status(200).json(userUpdated)
+})
+
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -86,4 +136,6 @@ module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getAll,
+  updateUserRole,
 }

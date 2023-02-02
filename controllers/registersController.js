@@ -4,19 +4,24 @@ const Register = require('../models/registerModel')
 const User = require('../models/userModel')
 
 // @desc    Get all registers
-// @route   GET /api/goals
+// @route   GET /api/
 // @access  Private
 const getRegisters = asyncHandler(async (req, res) => {
   const registers = await Register.find()
-  res.status(200).json(registers)
+  if (registers){
+    res.status(200).json(registers)
+  } else {
+    res.status(400)
+    throw new Error('Registers not found')
+  }
 })
 
 // @desc    Set register
-// @route   POST /api/register
+// @route   POST /api/
 // @access  Private
 const setRegister = asyncHandler(async (req, res) => {
-  const { inmetroRegister, brand, model, powerkW, inmetroURL, description, status } = req.body
-  if (!inmetroRegister || !brand || !model || !powerkW || !inmetroURL || !description || !status) {
+  const { equipment, inmetroRegister, brand, model, powerkW, inmetroURL, description, status } = req.body
+  if (!equipment || !inmetroRegister || !brand || !model || !powerkW || !inmetroURL || !description || !status) {
     res.status(400)
     throw new Error('Please add all the fields')
   }
@@ -31,6 +36,7 @@ const setRegister = asyncHandler(async (req, res) => {
 
   const register = await Register.create({
     user:req.user.id,
+    equipment: equipment,
     inmetroRegister: inmetroRegister,
     brand: brand,
     model:model,
@@ -43,57 +49,56 @@ const setRegister = asyncHandler(async (req, res) => {
   res.status(200).json(register)
 })
 
-// @desc    Update goal
-// @route   PUT /api/goals/:id
-// @access  Private
+// @desc    Update register
+// @route   PUT /api/register/:id
+// @access  Private/Admin
 const updateRegister = asyncHandler(async (req, res) => {
-  const register = await Register.findById(req.params.id)
 
+  if (req.user.role !== 'admin') {
+    res.status(401)
+    throw new Error('User not authorized')
+  }
+
+  const register = await Register.findById(req.params.id)
+  
   if (!register) {
     res.status(400)
     throw new Error('Register not found')
   }
 
-  // Check for user
-  if (!req.user) {
-    res.status(401)
-    throw new Error('User not found')
+  // const updatedRegister = await Register.findByIdAndUpdate(req.params.id, req.body, {
+  //   new: true,
+  // })
+  const filter = {id: req.params.id}
+  const update = {};
+  for (const key of Object.keys(req.body)){
+      if (req.body[key] !== '') {
+          update[key] = req.body[key];
+      }
   }
+  Register.findOneAndUpdate({}, {$set: update}, {new: true}).catch(err => {
+        res.status(500).send(err);
+        throw new Error('Information not updated')
+    })
+    const registerRes = await Register.findById(req.params.id)
+    res.status(200).json(registerRes)
+})
 
-  // Make sure the logged in user matches the goal user
-  if (register.user.toString() !== req.user.id) {
+// @desc    Delete goal
+// @route   DELETE /api/registers/:id
+// @access  Private/Admin
+const deleteRegister = asyncHandler(async (req, res) => {
+
+  if (req.user.role !== 'admin') {
     res.status(401)
     throw new Error('User not authorized')
   }
 
-  const updatedRegister = await Register.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  })
-
-  res.status(200).json(updatedRegister)
-})
-
-// @desc    Delete goal
-// @route   DELETE /api/goals/:id
-// @access  Private
-const deleteRegister = asyncHandler(async (req, res) => {
   const register = await Register.findById(req.params.id)
 
   if (!register) {
     res.status(400)
-    throw new Error('Goal not found')
-  }
-
-  // Check for user
-  if (!req.user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
-  // Make sure the logged in user matches the goal user
-  if (register.user.toString() !== req.user.id) {
-    res.status(401)
-    throw new Error('User not authorized')
+    throw new Error('Register not found')
   }
 
   await register.remove()

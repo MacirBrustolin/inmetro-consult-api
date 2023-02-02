@@ -79,12 +79,13 @@ const getMe = asyncHandler(async (req, res) => {
 // @route   GET /api/users/all
 // @access  Private and admin
 const getAll = asyncHandler(async (req, res) => {
-  const users = await User.find()
   
   if (req.user.role !== 'admin') {
     res.status(401)
     throw new Error('User not authorized')
   }
+
+  const users = await User.find()
 
   if (!users){
     res.status(404)
@@ -105,12 +106,12 @@ const updateUserRole = asyncHandler(async (req, res) => {
     throw new Error('Please add all fields')
   }
 
+  if (req.user.role !== 'admin') {
+    res.status(401)
+    throw new Error('User not authorized')
+  }
+  
   const user = await User.findById(id)
-
-  // if (req.user.role !== 'admin') {
-  //   res.status(401)
-  //   throw new Error('User not authorized')
-  // }
 
   //Check for the user existence
   if (!user) {

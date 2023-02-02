@@ -6,6 +6,10 @@ const RegisterSchema = new mongoose.Schema({
     required:true,
     ref: 'User'
   },
+  equipment: {
+    type: String,
+    required: [true, 'Please add the equipment type (microinverter ou inverter)']
+  },
   inmetroRegister: {
     type: String,
     required: [true, 'Please add an INMETRO register']

@@ -4,11 +4,25 @@ const Register = require('../models/registerModel')
 const User = require('../models/userModel')
 
 // @desc    Get all registers
-// @route   GET /api/
+// @route   GET /api/registers
 // @access  Private
 const getRegisters = asyncHandler(async (req, res) => {
-  const registers = await Register.find()
-  if (registers){
+  const { equipment, inmetroRegister, brand, model, powerkW, inmetroURL, description, status } = req.query
+
+  const update = {};
+  for (const key of Object.keys(req.query)){
+      if (req.query[key] !== '') {
+          update[key] = req.query[key];
+      }
+  }
+  let registers = {}
+  if (update == {}){
+    registers = await Register.find()
+  } else {
+    registers = await Register.find({$and: [update]}).sort({ id: 1 })
+  }
+
+  if (registers.length){
     res.status(200).json(registers)
   } else {
     res.status(400)
@@ -17,7 +31,7 @@ const getRegisters = asyncHandler(async (req, res) => {
 })
 
 // @desc    Set register
-// @route   POST /api/
+// @route   POST /api/registers/:id
 // @access  Private
 const setRegister = asyncHandler(async (req, res) => {
   const { equipment, inmetroRegister, brand, model, powerkW, inmetroURL, description, status } = req.body
@@ -50,7 +64,7 @@ const setRegister = asyncHandler(async (req, res) => {
 })
 
 // @desc    Update register
-// @route   PUT /api/register/:id
+// @route   PUT /api/registers/:id
 // @access  Private/Admin
 const updateRegister = asyncHandler(async (req, res) => {
 

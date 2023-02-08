@@ -14,12 +14,17 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Please add all fields')
   }
 
+  if(!email.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/)){
+    res.status(422)
+    throw new Error('Email format is invalid')
+  } 
+
   // Check if user exists
   const userExists = await User.findOne({ email })
 
   if (userExists) {
-    res.status(400)
-    throw new Error('User already exists')
+    res.status(409)
+    throw new Error('Email already registered')
   }
 
   // Hash password
@@ -56,7 +61,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email })
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
+    res.status(200).json({
       _id: user.id,
       name: user.name,
       email: user.email,

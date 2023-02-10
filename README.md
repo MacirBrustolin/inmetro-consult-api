@@ -3,16 +3,6 @@
 ----
 *Register Users*
 
-*Login*
-
-*Get User Logged in data*
-
-<_Users with Admin role Endpoints_>
-
-*Geta all user data*
-
-*Update User*
-
 * **URL**
 
   api/users
@@ -49,12 +39,60 @@
   
   * **Code:** 422 UNPROCESSABLE ENTRY <br />
     **Content:** `{ message : "Email format is invalid" }`
-    
+  
+  
+*Login*
+  
+* **URL**
 
-* **Sample Call:**
+  api/users/login
 
-  <_Just a sample call to your endpoint in a runnable format ($.ajax call or a curl request) - this makes life easier and more predictable._> 
+* **Method:**
 
-* **Notes:**
+  `POST`
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._>  
+* **Data Params**
+
+  `{ email: String, password: String }`
+
+* **Success Response:**
+  
+    * **Code:** 200 OK <br />
+    **Content:** `{ _id : "user ID", name : "User Name", email: "User Email", token: JWToken }`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "Invalid Credentials" }`
+  
+*Get User Logged data*
+
+* **URL**
+
+  api/users/me
+
+* **Method:**
+
+  `GET`
+
+* **Success Response:**
+  
+    * **Code:** 200 OK <br />
+    **Content:** `{ _id : "user ID", name : "User Name", email: "User Email", token: JWToken }`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "Not authorized, no token" }`
+  
+  OR
+  
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "Not authorized" }`
+
+<_Users with Admin role Endpoints_>
+
+*Geta all user data*
+
+*Update User*
+

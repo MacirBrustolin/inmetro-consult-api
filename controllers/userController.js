@@ -68,7 +68,7 @@ const loginUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     })
   } else {
-    res.status(400)
+    res.status(401)
     throw new Error('Invalid credentials')
   }
 })
@@ -86,7 +86,7 @@ const getMe = asyncHandler(async (req, res) => {
 const getAll = asyncHandler(async (req, res) => {
   
   if (req.user.role !== 'admin') {
-    res.status(401)
+    res.status(403)
     throw new Error('User not authorized')
   }
 

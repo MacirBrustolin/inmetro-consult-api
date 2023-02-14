@@ -41,7 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user.id,
-      name: user.name,
+      name: user.userName,
       email: user.email,
       token: generateToken(user._id),
     })
@@ -63,7 +63,7 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
       _id: user.id,
-      name: user.name,
+      name: user.userName,
       email: user.email,
       token: generateToken(user._id),
     })
@@ -99,20 +99,27 @@ const getAll = asyncHandler(async (req, res) => {
   res.status(200).json(users)
 })
 
-// @desc    Get user data
-// @route   GET /api/users/me
+// @desc    Update user role
+// @route   PUT /api/users/update
 // @access  Private/ADM
 
 const updateUserRole = asyncHandler(async (req, res) => {
-  const {id, role} = req.body
+  const role = String(req.body.role).toLowerCase()
+  const id = String(req.body.id)
 
+  console.log(role)
   if (!role || !id) {
     res.status(400)
     throw new Error('Please add all fields')
   }
 
+  if (role !== "user" && role !== "admin") {
+    res.status(400)
+    throw new Error('Role does not exist, please use only "user" or "admin" roles.')
+  }
+
   if (req.user.role !== 'admin') {
-    res.status(401)
+    res.status(403)
     throw new Error('User not authorized')
   }
   
@@ -120,15 +127,20 @@ const updateUserRole = asyncHandler(async (req, res) => {
 
   //Check for the user existence
   if (!user) {
-    res.status(400)
+    res.status(404)
     throw new Error('User not found')
   }
 
-  const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+  const updatedUser = await User.findByIdAndUpdate(id, {
     role: role,
   })
   const userUpdated = await User.findById(id)
-  res.status(200).json(userUpdated)
+  res.status(200).json({
+    role: user.role,
+    _id: user.id,
+    userName: user.userName,
+    email: user.email,
+  })
 })
 
 // Generate JWT

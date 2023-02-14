@@ -10,7 +10,6 @@ const errorHandler = (err, req, res, next) => {
     } else {
       res.json(Object.assign({}, response, {stack: err.stack}))
     }
-    console.log(process.env.NODE_ENV)
     
   }
   

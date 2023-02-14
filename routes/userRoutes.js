@@ -13,6 +13,6 @@ router.post('/', registerUser)
 router.post('/login', loginUser)
 router.get('/me', protect, getMe)
 router.get('/all', protect, getAll)
-router.put('/update', protect, updateUserRole)
+router.put('/updateRole', protect, updateUserRole)
 
 module.exports = router

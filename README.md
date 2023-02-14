@@ -90,9 +90,54 @@
   * **Code:** 401 UNAUTHORIZED <br />
     **Content:** `{ message : "Not authorized" }`
 
-<_Users with Admin role Endpoints_>
+<_Admin Users Endpoints_>
 
 *Geta all user data*
 
-*Update User*
+* **URL**
 
+  api/users/all
+
+* **Method:**
+
+  `GET`
+
+* **Success Response:**
+  
+    * **Code:** 200 OK <br />
+    **Content:** `{ role: "User Role", _id : "user ID", userName : "User Name", email: "User Email", password: "Hashed Passwrod", createdAt: "User data Creation", updatedAt: "Last Update" }`
+ 
+* **Error Response:**
+
+    * **Code:** 403 UNAUTHORIZED <br />
+    **Content:** `{ message : "User not authorized" }`
+  
+  OR
+  
+    * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ message : "Users not found!" }`
+    
+*Update User Role*
+
+* **URL**
+
+  api/users/updateRole
+
+* **Method:**
+
+  `PUT`
+
+* **Data Params**
+
+  `{ role: String ("admin" or "user"), id: String }`
+
+* **Success Response:**
+  
+    * **Code:** 200 OK <br />
+    **Content:** `{ role: "User Role", _id : "user ID", userName : "User Name", email: "User Email" }`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "Invalid Credentials" }`
+  

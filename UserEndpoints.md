@@ -138,6 +138,21 @@
  
 * **Error Response:**
 
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ message : "Invalid Credentials" }`
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ message : "Please add all the fields" }`
+
+  OR
+  
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ message : "Role does not exist, please use only "user" or "admin" roles." }`
+
+  OR
+
+  * **Code:** 403 UNAUTHORIZED <br />
+    **Content:** `{ message : "User not authorized" }`    
+    
+  OR
+  
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ message : "User not found" }`
   

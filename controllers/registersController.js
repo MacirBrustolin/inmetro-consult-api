@@ -25,13 +25,13 @@ const getRegisters = asyncHandler(async (req, res) => {
   if (registers.length){
     res.status(200).json(registers)
   } else {
-    res.status(400)
+    res.status(404)
     throw new Error('Registers not found')
   }
 })
 
 // @desc    Set register
-// @route   POST /api/registers/:id
+// @route   POST /api/registers
 // @access  Private
 const setRegister = asyncHandler(async (req, res) => {
   const { equipment, inmetroRegister, brand, model, powerkW, inmetroURL, description, status } = req.body
@@ -44,7 +44,7 @@ const setRegister = asyncHandler(async (req, res) => {
   const registerExists = await Register.findOne({ inmetroRegister })
 
   if (registerExists) {
-    res.status(400)
+    res.status(409)
     throw new Error('Register already exists')
   }
 
@@ -76,7 +76,7 @@ const updateRegister = asyncHandler(async (req, res) => {
   const register = await Register.findById(req.params.id)
   
   if (!register) {
-    res.status(400)
+    res.status(404)
     throw new Error('Register not found')
   }
 
